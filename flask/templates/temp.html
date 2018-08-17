@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Python Flask Bucket List App</title>
+
+    <script src="../static/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script> 
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+      <link href="../static/css/signup.css" rel="stylesheet">
+
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+       
+    
+ 
+    <style>
+   /* Space out content a bit */
+body {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+/* Custom page header */
+.header {
+  padding-bottom: 1rem;
+  border-bottom: .05rem solid #e5e5e5;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 3rem;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 1.5rem;
+  color: #777;
+  border-top: .05rem solid #e5e5e5;
+}
+
+/* Customize container */
+@media (min-width: 48em) {
+  .container {
+    max-width: 46rem;
+  }
+}
+.container-narrow > hr {
+  margin: 2rem 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: .05rem solid #e5e5e5
+ 
+}
+.jumbotron .btn {
+  padding: .75rem 1.5rem;
+  font-size: 1.5rem;
+  color:#FFFFF0
+}
+
+/* Supporting marketing content */
+.marketing {
+  margin: 3rem 0;
+}
+.marketing p + h4 {
+  margin-top: 1.5rem;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 48em) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0rem;
+  }
+
+
+  .trash {
+        color: rgb(209, 91, 71);
+    }
+    .panel-body .checkbox {
+        display: inline-block;
+        margin: 0px;
+    }
+    .list-group {
+        margin-bottom: 0px;
+    }
+
+}
+}
+</style>
+
+    <link href="../static/css/signup.css" rel="stylesheet">
+
+
+    
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+
+     
+<script>
+    $(function() {
+        $.ajax({
+            url: '/getWish',
+            type: 'GET',
+            success: function(res) {
+ 
+                // Parse the JSON response
+                var wishObj = JSON.parse(res);
+                $('#ulist').empty();
+                // Append to the template
+                $("#listTemplate").tmpl(wishObj).appendTo("#ulist");
+ 
+ 
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+</script>
+
+
+
+ 
+</head>
+ 
+<body>
+ 
+    <div class="container">
+      <header class="header">
+        <nav>
+          <ul class="nav nav-pills float-right">
+            <li role="presentation" class="active">
+              <a class="nav-link active" href="/logout">Log Out</a>
+            </li>
+            <li role="presentation"><a class="nav-link" href="/showAddWish">Add Wish</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Python Flask App</h3>
+      </header>
+
+      <script id="listTemplate" type="text/x-jQuery-tmpl">
+      <li class="list-group-item">
+        <div class="checkbox">
+            <label>
+                ${Title}
+            </label>
+        </div>
+        <div class="pull-right action-buttons">
+            <a data-toggle="modal" data-target="#editModal"><span class="glyphicon glyphicon-pencil"></span></a>
+            
+        </div>
+    </li>
+</script>
+
+ 
+        <div class="row">
+        <div class="col-md-12">
+            
+                <div class="panel-body">
+
+                    <ul id="ulist" class="list-group">
+                        
+ 
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+    
+ 
+        <footer class="footer">
+            <p>&copy; Company 2015</p>
+        </footer>
+ 
+    </div>
+</body>
+ 
+</html>

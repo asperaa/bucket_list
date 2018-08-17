@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Python Flask Bucket List App</title>
+ 
+ 
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+    <style>
+
+
+    .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+         
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+   /* Space out content a bit */
+body {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+/* Custom page header */
+.header {
+  padding-bottom: 1rem;
+  border-bottom: .05rem solid #e5e5e5;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 3rem;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 1.5rem;
+  color: #777;
+  border-top: .05rem solid #e5e5e5;
+}
+
+/* Customize container */
+@media (min-width: 48em) {
+  .container {
+    max-width: 46rem;
+  }
+}
+.container-narrow > hr {
+  margin: 2rem 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: .05rem solid #e5e5e5;
+}
+.jumbotron .btn {
+  padding: .75rem 1.5rem;
+  font-size: 1.5rem;
+}
+
+/* Supporting marketing content */
+.marketing {
+  margin: 3rem 0;
+}
+.marketing p + h4 {
+  margin-top: 1.5rem;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 48em) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
+}
+</style>
+ 
+    <script src="../static/js/jquery-3.2.1.js"></script>
+
+    <script src="../static/js/jquery.ui.widget.js"></script>
+ 
+    <script type="text/javascript" src="../static/js/jquery.fileupload.js"></script>
+ 
+    <script type="text/javascript" src="../static/js/jquery.fileupload-process.js"></script>
+ 
+    <script type="text/javascript" src="../static/js/jquery.fileupload-ui.js"></script>
+
+   
+    <script>
+        $(function(){
+
+            $('#fileupload').fileupload({
+                url:'/upload',
+                dataType:'json',
+                add:function(e,data){
+                    data.submit();
+                },
+
+                success:function(response,status){
+                    console.log(response);
+                    var filePath = 'static/Uploads/' + response.filename;
+                    $('#imgUpload').attr('src',filePath);
+                },
+
+                error:function(error){
+                    console.log(error);
+                }
+
+            });
+        })
+
+
+
+
+
+
+    </script>
+ 
+ 
+</head>
+ 
+<body>
+ 
+    <div class="container">
+      <header class="header">
+        <nav>
+          <ul class="nav nav-pills float-right">
+            <li role="presentation" class="active">
+              <a class="nav-link active" href="#">Add Item</a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            
+          </ul>
+        </nav>
+        <h3 class="text-muted">Python Flask App</h3>
+      </header>
+ 
+        <form role="form" method="post" action="/addWish">
+ 
+ 
+            <!-- Form Name -->
+            <legend>Create Your Wish</legend>
+ 
+            <!-- Text input-->
+            <div class="form-group">
+                <label for="txtTitle">Title</label>
+ 
+                <input id="txtTitle" name="inputTitle" type="text" placeholder="placeholder" class="form-control input-md">
+ 
+            </div>
+ 
+            <!-- Textarea -->
+            <div class="form-group">
+                <label for="txtPost">Description</label>
+ 
+                <textarea class="form-control" id="txtPost" name="inputDescription"></textarea>
+ 
+            </div>
+ 
+ 
+            <div class="form-group">
+                <label for="txtPost">Photos</label>
+ 
+                <div class="input-group">
+                    <span class="input-group-btn">
+                    <span class="btn btn-primary btn-file">
+                        Browse&hellip; <input type="file" id="fileupload" name="file" multiple>
+                    </span>
+                    </span>
+                        <div class="pull-right">
+                                <img id="imgUpload" style="width: 140px; height: 140px;" class="img-thumbnail">
+                                <input type="hidden" name="filePath" id="filePath"></input>
+                        </div>
+ 
+            </div>
+ 
+            <div class="form-group">
+                <label>Mark this as private and not visible to others.</label>
+                <br/>
+                <input name="private" type="checkbox"> Mark as Private <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+            </div>
+ 
+            <div class="form-group">
+                <label>Have you already accomplished this?</label>
+                <br/>
+                <input name="done" type="checkbox"> Mark as Done <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </div>
+ 
+ 
+ 
+ 
+            <!-- Button -->
+            <div class="form-group">
+ 
+                <p class="text-center">
+                    <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Publish" />
+                </p>
+            </div>
+ 
+ 
+        </form>
+ 
+        <footer class="footer">
+            <p>&copy; Company 2015</p>
+        </footer>
+ 
+    </div>
+</body>
+ 
+ 
+</html>

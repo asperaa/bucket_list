@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Python Flask Bucket List App</title>
+ 
+ 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+ 
+    
+    <style>
+   /* Space out content a bit */
+body {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+/* Custom page header */
+.header {
+  padding-bottom: 1rem;
+  border-bottom: .05rem solid #e5e5e5;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 3rem;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 1.5rem;
+  color: #777;
+  border-top: .05rem solid #e5e5e5;
+}
+
+/* Customize container */
+@media (min-width: 48em) {
+  .container {
+    max-width: 46rem;
+  }
+}
+.container-narrow > hr {
+  margin: 2rem 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: .05rem solid #e5e5e5;
+}
+.jumbotron .btn {
+  padding: .75rem 1.5rem;
+  font-size: 1.5rem;
+}
+
+/* Supporting marketing content */
+.marketing {
+  margin: 3rem 0;
+}
+.marketing p + h4 {
+  margin-top: 1.5rem;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 48em) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
+}
+</style>
+
+<script src="../static/js/jquery-3.2.1.js"></script>
+
+
+
+<script>
+
+
+
+$(function() {
+    $.ajax({
+        url: '/getAllWishes',
+        type: 'GET',
+        success: function(response) {
+            console.log(response);
+
+            var data = JSON.parse(response);
+
+
+
+            
+        var div = $('<div>').attr('class', 'row');
+        for (var i = 0; i < data.length; i++) {
+                 div.append(CreateThumb(data[i].Id,data[i].Title, data[i].Description, data[i].FilePath,data[i].Like,data[i].HasLiked));  
+                $('.well').append(div);
+        }
+        
+        },
+
+
+        error: function(error) {
+            console.log(error);
+        }
+    });
+})
+
+
+
+
+
+
+
+
+
+
+function CreateThumb(id,title,desc,filepath,like,hasLiked){
+    
+    var mainDiv = $('<div>').attr('class', 'col-sm-12 col-md-12');
+
+   var thumbNail = $('<div>').attr('class', 'thumbnail');
+
+    var img = $('<img>').attr({
+        'src': filepath,
+        'data-holder-rendered': true,
+        'style': 'height: auto; width: auto; display: block'
+    });
+
+    var caption = $('<div>').attr('class', 'caption');
+   
+    var title = $('<h3>').text(title);
+   
+    var desc = $('<p>').text(desc);
+
+   var p = $('<p>');
+
+    var btn=$('<button>').attr({
+        'id':'btn_'+id,
+        'type':'button',
+        'class':'btn btn-danger btn-sm'
+    });
+
+
+    var span=$('<span>').attr({
+
+        'class':'glyphicon glyphicon-thumbs-up',
+        'aria-hidden':'true'
+    });
+
+
+    var likeSpan = $('<span>').attr('aria-hidden','true').html('&nbsp;'+like+' like(s)');
+   if (hasLiked == "1") {
+    likeSpan.html('&nbsp;You & ' + (Number(like) - 1) + ' Others');
+} else {
+    likeSpan.html('&nbsp;' + like + ' like(s)');
+}
+
+    p.append(btn.append(span));
+     p.append(likeSpan);
+ 
+    
+    
+
+    caption.append(title);
+    caption.append(desc);
+    caption.append(p);
+
+    thumbNail.append(img);
+    thumbNail.append(caption);
+
+    mainDiv.append(thumbNail);
+
+    return mainDiv;
+}
+
+
+$(document).on('click','[id^="btn_"]',function(){
+    $.ajax({
+        url:'/addUpdateLike',
+        method:'POST',
+        data:{
+            wish:$(this).attr('id').split('_')[1],
+            like:1
+        },
+
+        success:function(response){
+            console.log(response);
+        },
+
+        error:function(error){
+            console.log(error);
+        }
+    });
+})
+
+
+</script>  
+
+ 
+</head>
+ 
+<body>
+ 
+    <div class="container">
+        <div class="header">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="#">Dashboard</a></li>
+                    <li role="presentation"><a href="/userHome">My List</a></li>
+                    <li role="presentation"><a href="/showAddWish">Add Item</a></li>
+                    <li role="presentation"><a href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+            <h3 class="text-muted">Python Flask App</h3>    
+        </div>
+ 
+        <div class="well" >
+        
+        </div>
+ 
+            <footer class="footer">
+                <p>&copy; Company 2015</p>
+            </footer>
+ 
+        </div>
+</body>
+ 
+</html>
